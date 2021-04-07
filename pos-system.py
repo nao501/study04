@@ -33,13 +33,22 @@ def main():
     
     # オーダー登録
     order=Order(item_master)
-    name1 = order.add_item_order("001")
+    order.add_item_order("001")
     order.add_item_order("002")
     order.add_item_order("003")
+    item1 = Item("001","りんご",100)
+    item2 = Item("002","なし",120)
+    item3 = Item("003","みかん",150)
+# マスター検索
+    if item1.item_code in '001':
+        print(item1.item_code +":"+item1.item_name,item1.price)
+    else:
+        print("miss")
 
-   # マスター検索
-    found = next((master for master in item_master if master.item_code =="001" ),None )
-    print(found)
+   # 元マスター検索
+    #order_list = sorted(item_master,key = lambda x:x.item_code,reverse=False)
+    #for o in order_list[list(map(lambda x:x.item_code,order_list)).index("001"):]:
+    #   print(o.item_code)
 
     # オーダー表示
     order.view_item_list()
