@@ -1,3 +1,4 @@
+from os import error
 from numpy.lib.twodim_base import mask_indices
 import pandas as pd
 import csv
@@ -32,22 +33,22 @@ def main():
     item_master=[]
     #商品マスター.csvからデータを読み込み
     master_deta = open("商品マスター.csv",'r')
-    a_list = []
-    b_list = []
-    c_list = []
+    item_code_list = []
+    tem_name_list = []
+    price_list = []
 
     for row in csv.reader(master_deta):
-        a_list.append(row[0])
-        b_list.append(row[1])
-        c_list.append(row[2])
+        item_code_list.append(row[0])
+        tem_name_list.append(row[1])
+        price_list.append(row[2])
     
     #商品マスター.csvの1行目のセルデータを削除
-    del a_list[0]
-    del b_list[0]
-    del c_list[0]
+    del item_code_list[0]
+    del tem_name_list[0]
+    del price_list[0]
 
     #各リストをItem()に入れていく
-    for item_code, item_name, price in zip(a_list,b_list,c_list):
+    for item_code, item_name, price in zip(item_code_list,tem_name_list,price_list):
         item_master.append(Item(item_code, item_name, price))
 
 
@@ -65,17 +66,29 @@ def main():
     order.view_item_list()
     # オーダー登録
     order_code = input("商品コードを入力してください：")
+    order_count = int(input("個数を入力してください："))
     
     # マスター検索
     for item in item_master:
         for item_order in order.item_order_list:
             if item.item_code == item_order:
-                print("商品コード" +item.item_code +":"+ item.item_name + '￥'+str(item.price)+'円')
+                print(f"商品コード{item.item_code}:{item.item_name}￥{item.price}円")
     for item in item_master:
         if item.item_code == order_code:
-            print("\n選んだ商品は商品コード" +item.item_code +":"+ item.item_name + '￥'+str(item.price)+'円')
-              
+            item_price = int(item.price)*order_count
+            print(f"\n選んだ商品は商品コード{item.item_code}:{item.item_name}￥{item.price}円\n")
+            print(f"個数：{order_count}個,合計金額{item_price}円")
+
+            customer_money =int(input("金額を入力してください："))
+            return_money = customer_money-item_price
             
+            if return_money <0:
+                error_money =item_price-customer_money
+                print(f"{error_money}円不足しています")
+            elif return_money == 0:
+                print("ちょうど頂きます")
+            else:
+                print(f"{return_money}円お返しです。")
   
    
 
