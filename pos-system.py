@@ -1,4 +1,5 @@
 import pandas as pd
+import datetime
 import csv
 ### 商品クラス
 class Item:
@@ -64,17 +65,22 @@ def main():
         else:
             text_count = int(input("個数を入力してください："))
             order.add_item_order(text_order,text_count)
-    
+    total_price = 0
+    buy_list=[]
     # マスター検索
     for item in item_master:
         for item_order,order_count in zip(order.item_order_list,order.order_count_list):
             if item.item_code == item_order:
                 print(f"商品コード{item.item_code}:{item.item_name}￥{item.price}円/{order_count}個")
+                info =f"{item.item_name} ￥{item.price}円 /{order_count}個\n"
+                buy_list.append(info)
                 order_price = int(item.price)*order_count
-        total_price = order_price +int(item.price)
+                total_price = order_price +total_price
+            else:
+                pass
+        
         
     print(f"合計金額は{total_price}円")
-
   
     customer_money =int(input("支払い金額を入力してください："))
     return_money = customer_money-total_price
@@ -86,8 +92,16 @@ def main():
         print("ちょうど頂きます")
     else:
         print(f"{return_money}円お返しです。")
+
+    # 日付時刻取得    
+    dt_now = datetime.datetime.now()
   
-   
+    res1=''.join(''.join(map(str,x))for x in buy_list)
+    res2 = f"{dt_now}\n{res1}\n合計金額{total_price}円\nお預かり{customer_money}円\nおつり{return_money}円 "
+
+    with open("レシート.txt",mode='w') as f:
+        f.write(res2)
+    print(res2)
 
 
 if __name__ == "__main__":
