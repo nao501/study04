@@ -45,8 +45,9 @@ class Order:
         else:
            print(f"{return_money}円お返しです。")
     
+    def receipt(self,total_price,customer_money):
         dt_now = datetime.datetime.now()
-  
+        return_money = customer_money-total_price
         res1=''.join(''.join(map(str,x))for x in self.buy_item_list)
         res2 = f"{dt_now}\n{res1}\n合計金額{total_price}円\nお預かり{customer_money}円\nおつり{return_money}円 "
 
@@ -111,6 +112,7 @@ def main():
 
     customer_money =int(input("支払い金額を入力してください："))
     order.amount_calculation(customer_money,total_price)
+    order.receipt(total_price,customer_money)
 
 
 if __name__ == "__main__":
